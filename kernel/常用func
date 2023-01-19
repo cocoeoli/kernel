@@ -1,0 +1,93 @@
+
+//////////////////////////////////////////
+ffff80000844ce50 T gic_dist_config
+
+ffff80000844f200 t gic_populate_rdist
+
+ffff800008079ce0 T cpu_startup_entry
+
+ffff800008042fc0 T kernel_thread
+
+ffff800008db8610 t kernel_init  /// ffff800008e38610
+
+ffff800008db7eb0 T el1h_64_irq_handler
+
+ffff8000095c115c t kernel_init_freeable
+
+
+0xffff800009641130  console_on_rootfs中函数
+
+
+ffff80000802cf20 T free_initmem
+
+ffff8000080b9b40 T rcu_barrier（正常不会阻塞，直接jump）
+
+
+
+
+ffff800008045390 T cpus_read_lock
+
+ffff800008045660 T cpus_read_unlock
+
+
+ffff800008dbc300 T mutex_lock
+ffff800008dbbc28 T mutex_unlock
+
+ffff80000808caf8 T complete
+ffff800008dbb988 T wait_for_completion
+
+ffff8000080b88f0 t rcu_barrier_func
+
+
+ffff8000080e1388 T smp_call_function_single
+
+
+rcu自增导致complete失效，进而陷入sleep
+
+
+
+ffff8000080bed30 T rcu_segcblist_insert_done_cbs
+ffff8000080be9d8 T rcu_segcblist_add_len
+
+
+ffff800008bc1730 T of_irq_get                           //比较两种情况
+ffff800008bb69a8 T of_find_property
+ffff80000961c2b0 t arch_timer_select_ppi
+ffff80000961c358 t arch_timer_register                    //正常初始化，ppi=B
+ffff8000080a9318 T __request_percpu_irq
+
+ffff8000080112bc t el1h_64_irq
+
+ffff800008db7eb0 T el1h_64_irq_handler
+el1h_64_irq_handler -> el1_interrupt -> irq_exit_rcu -> __do_softirq -> rcu_core -> rcu_segcblist_add_len
+
+
+4    ->    c
+表         实际
+表 + 8 = 实际
+b     ->   13
+
+__kernfs_remove -> kernfs_put -> idr_remove -> radix_tree_delete_item -> __radix_tree_delete -> delete_node -> call_rcu -> __call_rcu -> rcu_segcblist_enqueue
+
+
+
+
+ffff8000095e4f84 t gic_of_init
+ffff8000095e49e4 t gic_init_bases
+
+ffff80000844e188 t gic_do_wait_for_rwp
+ffff80000844e1f8 t gic_dist_wait_for_rwp
+
+
+ffff80000961ce60 t arch_timer_of_init
+ffff80000961c9a8 t arch_timer_of_configure_rate.part.10
+
+ffff800008ba1278 t arch_timer_handler_virt
+
+
+ffff800008dac260 T _printk
+
+
+
+### 驱动初始化入口
+0xffff80000969f8bc 
